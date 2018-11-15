@@ -22,7 +22,9 @@ To upload image from the edit form you have ti implement onImageUploaded event h
             });
         }
         
-imageUploadHandler has two parameters, file: the actual file that is going to be uploaded and input: this is the HTML input element from the edit form
+imageUploadHandler has two parameters:
+- file - the actual file that is going to be uploaded 
+- input - this is the HTML input element from the edit form
 
 The next step is to create upload method on the server 
 
@@ -43,3 +45,6 @@ The next step is to create upload method on the server
 
             return Ok(new { url = Url.Content("~/uploads/" + uniqueFileName) });
         }
+
+
+[BALKANGraph](https://balkangraph.com)
