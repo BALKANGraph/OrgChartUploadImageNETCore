@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="~/js/jquery.js"></script>
+    <script src="~/js/orgchart.js"></script>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            font-family: Helvetica;
+        }
+
+        #tree {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="tree"></div>
+
+    <script type="text/javascript">
+        function imageUploadHandler(file, input) {
+            var formData = new FormData();
+            formData.append('file', file);           
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UploadImage")",
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    input.value = data.url;
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+
+
+        function updateNodeHandler(sender, node) {
+            $.post("@Url.Action("UpdateNode")", { id: node.id, nodeJson: JSON.stringify(node.data) })
+                .done(function () {
+                    sender.updateNode(node);
+                });
+            return false;
+        }
+
+
+        $.getJSON("@Url.Action("Read")", function (data) {
+            chart = new OrgChart(document.getElementById("tree"), {
+                nodeMouseClickBehaviour: BALKANGraph.action.edit,
+                onImageUploaded: imageUploadHandler,
+                onUpdateNode: updateNodeHandler,
+
+                nodeBinding: {
+                    field_0: "FullName",
+                    field_1: "Title",
+                    img_0: "Image"
+                },
+                links: data.links,
+                nodes: data.nodes
+        });
+    });
+    </script>
+</body>
+</html>
+
