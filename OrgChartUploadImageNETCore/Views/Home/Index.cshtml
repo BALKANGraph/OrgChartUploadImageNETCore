@@ -47,7 +47,7 @@
 
 
         function updateNodeHandler(sender, node) {
-            $.post("@Url.Action("UpdateNode")", { id: node.id, nodeJson: JSON.stringify(node.data) })
+            $.post("@Url.Action("UpdateNode")", { id: node.id, nodeJson: JSON.stringify(node) })
                 .done(function () {
                     sender.updateNode(node);
                 });
@@ -59,14 +59,13 @@
             chart = new OrgChart(document.getElementById("tree"), {
                 nodeMouseClickBehaviour: BALKANGraph.action.edit,
                 onImageUploaded: imageUploadHandler,
-                onUpdateNode: updateNodeHandler,
+                onUpdate: updateNodeHandler,
 
                 nodeBinding: {
                     field_0: "FullName",
                     field_1: "Title",
                     img_0: "Image"
                 },
-                links: data.links,
                 nodes: data.nodes
         });
     });

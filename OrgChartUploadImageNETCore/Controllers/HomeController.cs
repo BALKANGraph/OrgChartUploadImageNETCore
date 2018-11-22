@@ -60,33 +60,21 @@ namespace OrgChartUploadImageNETCore.Controllers
 
         public JsonResult Read()
         {
-            var links = new Dictionary<int, string>();
             var nodes = new Dictionary<int, string>();
-
-            if (!cache.TryGetValue("links", out links))
-            {
-                links = new Dictionary<int, string>();
-
-                links.Add(2, JsonConvert.SerializeObject(new { from = 2, to = 1}));
-                links.Add(3, JsonConvert.SerializeObject(new { from = 3, to = 1}));
-
-                cache.Set("links", links);
-            }
 
             if (!cache.TryGetValue("nodes", out nodes))
             {
                 nodes = new Dictionary<int, string>();
 
                 nodes.Add(1, JsonConvert.SerializeObject(new { id = 1, FullName = "Rory White", Title = "CEO" }));
-                nodes.Add(2, JsonConvert.SerializeObject(new { id = 2, FullName = "Jess John", Title = "IT" }));
-                nodes.Add(3, JsonConvert.SerializeObject(new { id = 3, FullName = "Gail Talley", Title = "Marketing", Image = "//balkangraph.com/js/img/1.jpg" }));
+                nodes.Add(2, JsonConvert.SerializeObject(new { id = 2, pid = 1, FullName = "Jess John", Title = "IT" }));
+                nodes.Add(3, JsonConvert.SerializeObject(new { id = 3, pid = 1, FullName = "Gail Talley", Title = "Marketing", Image = "//balkangraph.com/js/img/1.jpg" }));
 
                 cache.Set("nodes", nodes);
             }
 
             return Json(new
             {
-                links = links.Select(p => JsonConvert.DeserializeObject(p.Value)),
                 nodes = nodes.Select(p => JsonConvert.DeserializeObject(p.Value))
             }, new JsonSerializerSettings(){ MaxDepth = 2 });
         }
