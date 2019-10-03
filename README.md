@@ -1,6 +1,6 @@
 # Tutorial: How to Upload Image Files from OrgChart JS to the server - ASP.NET Core
 
-To upload image from the edit form you have ti implement onImageUploaded event hadler. Here is an example
+To upload image from the edit form you have to implement onImageUploaded event hadler. Here is an example
 
         function imageUploadHandler(file, input) {
             var formData = new FormData();
