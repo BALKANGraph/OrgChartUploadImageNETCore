@@ -1,8 +1,9 @@
 # Tutorial: How to Upload Image Files from OrgChart JS to the server - ASP.NET Core
 
-To upload image from the edit form you have to implement onImageUploaded event hadler. Here is an example
+To upload image from the edit form you have to implement imageuploaded event hadler. Here is an example
 
-        function imageUploadHandler(file, input) {
+
+        chart.editUI.on('imageuploaded', function (sender, file, input) {
             var formData = new FormData();
             formData.append('file', file);           
 
@@ -20,9 +21,10 @@ To upload image from the edit form you have to implement onImageUploaded event h
                     alert(error);
                 }
             });
-        }
+        });
         
-imageUploadHandler has two parameters:
+imageUploadHandler has 3 parameters:
+- sender - the editUI object
 - file - the actual file that is going to be uploaded 
 - input - this is the HTML input element from the edit form
 
