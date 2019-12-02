@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="~/js/jquery.js"></script>
-    <script src="~/js/orgchart.js"></script>
+    <script src="https://balkangraph.com/js/latest/orgchart.js"></script>
     <style>
         html, body {
             width: 100%;
@@ -25,7 +25,17 @@
     <div id="tree"></div>
 
     <script type="text/javascript">
-        function imageUploadHandler(file, input) {
+        var chart = new OrgChart(document.getElementById("tree"), {
+                nodeMouseClick: OrgChart.action.edit,
+
+                nodeBinding: {
+                    field_0: "FullName",
+                    field_1: "Title",
+                    img_0: "Image"
+                }
+        });
+
+        chart.editUI.on('imageuploaded', function (sender, file, input) {
             var formData = new FormData();
             formData.append('file', file);           
 
@@ -43,32 +53,19 @@
                     alert(error);
                 }
             });
-        }
+        });
 
-
-        function updateNodeHandler(sender, node) {
-            $.post("@Url.Action("UpdateNode")", { id: node.id, nodeJson: JSON.stringify(node) })
+        
+        chart.on('update', function (sender, oldNodeData, newNodeData) {
+            $.post("@Url.Action("UpdateNode")", { id: newNodeData.id, nodeJson: JSON.stringify(newNodeData) })
                 .done(function () {
-                    sender.updateNode(node);
+                    console.log('updtaed on the server');
                 });
-            return false;
-        }
-
+        });
 
         $.getJSON("@Url.Action("Read")", function (data) {
-            chart = new OrgChart(document.getElementById("tree"), {
-                nodeMouseClickBehaviour: BALKANGraph.action.edit,
-                onImageUploaded: imageUploadHandler,
-                onUpdate: updateNodeHandler,
-
-                nodeBinding: {
-                    field_0: "FullName",
-                    field_1: "Title",
-                    img_0: "Image"
-                },
-                nodes: data.nodes
+            chart.load(data.nodes);
         });
-    });
     </script>
 </body>
 </html>
