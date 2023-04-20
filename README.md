@@ -45,7 +45,7 @@ The next step is to create upload method on the server
                 url = new Uri(new Uri(Request.Scheme + "://" + Request.Host.Value), Url.Content("~/photos/" + file.FileName)).ToString()
             });
         }
-        ```
+```
 
 
 [BALKAN App](https://balkan.app)
