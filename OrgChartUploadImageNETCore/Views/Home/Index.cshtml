@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="~/js/jquery.js"></script>
-    <script src="https://balkangraph.com/js/latest/orgchart.js"></script>
+    <script src="https://balkan.app/js/orgchart.js"></script>
     <style>
         html, body {
             width: 100%;
@@ -35,7 +35,7 @@
                 }
         });
 
-        chart.editUI.on('imageuploaded', function (sender, file, input) {
+        chart.editUI.on('imageuploaded', function (sender, args) {
             var formData = new FormData();
             formData.append('file', file);           
 

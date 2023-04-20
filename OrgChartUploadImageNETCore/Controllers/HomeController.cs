@@ -10,7 +10,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
+using System.Text.Json;
+
 
 namespace OrgChartUploadImageNETCore.Controllers
 {
@@ -65,18 +66,18 @@ namespace OrgChartUploadImageNETCore.Controllers
             if (!cache.TryGetValue("nodes", out nodes))
             {
                 nodes = new Dictionary<int, string>();
-
-                nodes.Add(1, JsonConvert.SerializeObject(new { id = 1, FullName = "Rory White", Title = "CEO" }));
-                nodes.Add(2, JsonConvert.SerializeObject(new { id = 2, pid = 1, FullName = "Jess John", Title = "IT" }));
-                nodes.Add(3, JsonConvert.SerializeObject(new { id = 3, pid = 1, FullName = "Gail Talley", Title = "Marketing", Image = "//balkangraph.com/js/img/1.jpg" }));
+                
+                nodes.Add(1, JsonSerializer.Serialize(new { id = 1, FullName = "Rory White", Title = "CEO" }));
+                nodes.Add(2, JsonSerializer.Serialize(new { id = 2, pid = 1, FullName = "Jess John", Title = "IT" }));
+                nodes.Add(3, JsonSerializer.Serialize(new { id = 3, pid = 1, FullName = "Gail Talley", Title = "Marketing", Image = "//balkangraph.com/js/img/1.jpg" }));
 
                 cache.Set("nodes", nodes);
             }
 
-            return Json(new
-            {
-                nodes = nodes.Select(p => JsonConvert.DeserializeObject(p.Value))
-            }, new JsonSerializerSettings(){ MaxDepth = 2 });
+            return Json(new 
+            { 
+                nodes = nodes.Select(p => JsonSerializer.Deserialize<Dictionary<int, string>>(p.Value)) 
+            });
         }
 
 
