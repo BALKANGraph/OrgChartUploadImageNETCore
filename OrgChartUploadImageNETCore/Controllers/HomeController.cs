@@ -6,27 +6,37 @@ namespace OrgChartUploadImageNETCore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private IWebHostEnvironment _host;
+
+        public HomeController(IWebHostEnvironment webHostEnvironment)
         {
-            _logger = logger;
+            _host = webHostEnvironment;
         }
+
 
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public async Task<IActionResult> UploadPhoto(List<IFormFile> files)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            long size = files.Sum(f => f.Length);
+
+            var file = files.First();
+            var path = Path.Combine(_host.WebRootPath, "photos", file.FileName);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }            
+
+            return Json(new
+            {
+                url = new Uri(new Uri(Request.Scheme + "://" + Request.Host.Value), Url.Content("~/photos/" + file.FileName)).ToString()
+            });
         }
     }
 }
