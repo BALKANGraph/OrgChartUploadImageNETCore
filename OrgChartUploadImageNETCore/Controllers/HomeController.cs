@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OrgChartUploadImageNETCore.Models;
 using System.Diagnostics;
 
 namespace OrgChartUploadImageNETCore.Controllers
